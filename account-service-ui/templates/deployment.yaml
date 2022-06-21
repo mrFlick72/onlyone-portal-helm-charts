@@ -2,60 +2,94 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "account-service-ui.fullname" . }}
-  labels:
-    {{- include "account-service-ui.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "account-service-ui.selectorLabels" . | nindent 6 }}
+  {{- include "account-service-ui.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "account-service-ui.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      {{- toYaml .Values.lables | nindent 8 }}
+      {{ end }}
+    {{- include "account-service-ui.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "account-service-ui.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        {{- if eq .Values.logging.enabled true }}
+
+        - name: filebeat
+          configMap:
+            name: filebeat-config
+        {{ end }}
+        - name: application-logs
+          emptyDir: { }
+
+        - name: application-config
+          configMap:
+            name: application-config
+
       containers:
+        {{- if eq .Values.logging.enabled true }}
+
+        - name: filebeats
+          image: docker.elastic.co/beats/filebeat:7.6.1
+          volumeMounts:
+            - name: application-logs
+              mountPath: /var/log/onlyone-portal/logs/
+
+            - name: filebeat
+              subPath: filebeat.yml
+              mountPath: /usr/share/filebeat/filebeat.yml
+
+        {{ end }}
+
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+          volumeMounts:
+            - name: application-logs
+              mountPath: /var/log/onlyone-portal/logs/
+
+            - name: application-config
+              subPath: application.yml
+              mountPath: /usr/local/onlyone-portal/config/application.yml
+
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
+            - containerPort: 8080
+            - containerPort: 8081
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: {{ .Values.pod.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.pod.probes.liveness.periodSeconds }}
+
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: {{ .Values.pod.probes.rediness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.pod.probes.rediness.periodSeconds }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+          {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .Values.aws.accessKey }}
+
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .Values.aws.secretKey }}
+            - name: AWS_REGION
+              value: {{ .Values.aws.region }}
+
+            - name: spring.config.additional-location
+              value: /usr/local/onlyone-portal/config/
