@@ -45,6 +45,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   application.yml: |
+    granted-role:
+      account-service: {{ .Values.application.allowedRole }}
+
     endSessionWithoutDiscovery: true
     oidcEndSessionUrl: {{ .Values.application.baseUrl }}/oidc/logout
     auth.oidcIss: {{ .Values.application.baseUrl }}

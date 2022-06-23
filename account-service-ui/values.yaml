@@ -76,12 +76,13 @@ logging:
   elasticSearch:
     host: elasticSearch.host
 application:
+  allowedRole: ACCOUNT
   sessionManagement:
     pollingRate: 5s
-  baseUrl:
+  baseUrl: http://example.com
 
   redis:
-    host:
+    host: http://redis
 
   sso:
     clientApp:
@@ -100,3 +101,10 @@ application:
 vauthenticator:
   baseUrl: https://api.vauthenticator.com
   backChannelBaseUrl: https://api.vauthenticator.com
+
+
+redis:
+  auth:
+    enabled: false
+  replica:
+    replicaCount: 1
