@@ -49,11 +49,11 @@ data:
       account-service: {{ .Values.application.allowedRole }}
 
     endSessionWithoutDiscovery: true
-    oidcEndSessionUrl: {{ .Values.application.baseUrl }}/oidc/logout
-    auth.oidcIss: {{ .Values.application.baseUrl }}
+    oidcEndSessionUrl: {{ .Values.vauthenticator.baseUrl }}/oidc/logout
+    auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
     logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
 
-    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/secure/admin/index
+    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/account/site/index.html
 
     spring:
       main:
@@ -131,23 +131,23 @@ data:
       session-management:
         enabled: true
         rp-iframe:
-          host: {{ .Values.application.baseUrl }}
+          host: {{ .Values.application.baseUrl }}/account
           polling-rate: {{ .Values.application.sessionManagement.pollingRate }}
           origin: {{ .Values.vauthenticator.baseUrl }}
-          logout-uri: /oidc_logout.html
+          logout-uri: /account/oidc_logout.html
       client:
         registrationId: client
       host: {{ .Values.vauthenticator.baseUrl }}
       backChannelHost: {{ .Values.vauthenticator.backChannelBaseUrl }}
 
-      i18n-messages:
-        cache:
-          updater:
-            listener:
-              sleeping: {{ .Values.application.i18n.listener.sleeping }}
-              queueUrl: {{ .Values.application.i18n.listener.queueUrl }}
-              maxNumberOfMessages: {{ .Values.application.i18n.listener.maxNumberOfMessages }}
-              visibilityTimeout: {{ .Values.application.i18n.listener.visibilityTimeout }}
-              waitTimeSeconds: {{ .Values.application.i18n.listener.waitTimeSeconds }}
-        ttl: {{ .Values.application.i18n.ttl }}
-        base-url: {{ .Values.application.i18n.baseUrl }}
+    i18n-messages:
+      cache:
+        updater:
+          listener:
+            sleeping: {{ .Values.application.i18n.listener.sleeping }}
+            queueUrl: {{ .Values.application.i18n.listener.queueUrl }}
+            maxNumberOfMessages: {{ .Values.application.i18n.listener.maxNumberOfMessages }}
+            visibilityTimeout: {{ .Values.application.i18n.listener.visibilityTimeout }}
+            waitTimeSeconds: {{ .Values.application.i18n.listener.waitTimeSeconds }}
+      ttl: {{ .Values.application.i18n.ttl }}
+      base-url: {{ .Values.application.i18n.baseUrl }}
