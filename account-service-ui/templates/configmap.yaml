@@ -134,7 +134,7 @@ data:
           host: {{ .Values.application.baseUrl }}/account
           polling-rate: {{ .Values.application.sessionManagement.pollingRate }}
           origin: {{ .Values.vauthenticator.baseUrl }}
-          logout-uri: /account/oidc_logout.html
+          logout-uri: /account/logout
       client:
         registrationId: client
       host: {{ .Values.vauthenticator.baseUrl }}
