@@ -2,14 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "i18n-message.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "i18n-message.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
+    - port: 8080
       name: http
   selector:
     {{- include "i18n-message.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,59 @@
+{{- if eq .Values.logging.enabled true }}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: {{ .Release.Namespace }}
+data:
+  filebeat.yml: |-
+    filebeat.config:
+        modules:
+          path: ${path.config}/modules.d/*.yml
+          reload.enabled: true
+        filebeat.inputs:
+          - type: log
+            json.keys_under_root: true
+            json.add_error_key: true
+            json.message_key: msg
+            enabled: true
+            paths:
+              - /var/log/onlyone-portal/logs/*.log
+        processors:
+          - add_fields:
+              target: application
+              fields:
+                name: todo-service
+          - add_cloud_metadata: ~
+          - add_docker_metadata: ~
+        setup.kibana:
+          host: "kibana.elastic-stack.svc.cluster.local:5601"
+
+        output.elasticsearch:
+          hosts: ['elasticsearch.elastic-stack.svc.cluster.local:9200']
+
+{{ end }}
+
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-config
+  namespace: {{ .Release.Namespace }}
+data:
+  application.yml: |
+    PRODUCTION_PORT: :8080
+    ACTUATOR_PORT: :8081
+    REGISTRATION_NAME: i18n-service
+    SQS_QUEUE_URL: {{ .Values.application.sqsQueueUrl }}
+    SQS_TIMEOUT: {{ .Values.application.sqsTimeout }}
+    SQS_MAX_NUMBER_OF_MESSAGES: {{ .Values.application.sqsMaxNumberOfMessages }}
+    SQS_WAIT_TIME_SECONDS: {{ .Values.application.sqsWaitTileSeconds }}
+    SQS_LISTENER_PAUSE_TIMEOUT: {{ .Values.application.sqsListenerPauseTimeout}}
+    MESSAGES_BUKET: {{ .Values.application.messageBuketName }}
+
+    update-signals:
+       {{ .Values.application.updateSignalsMap }}
