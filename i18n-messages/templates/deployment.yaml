@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "i18n-message.fullname" . }}
+  name: {{ include "i18n-messages.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-  {{- include "i18n-message.selectorLabels" . | nindent 6 }}
+  {{- include "i18n-messages.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
       {{- with .Values.podAnnotations }}
       {{- toYaml .Values.lables | nindent 8 }}
       {{ end }}
-    {{- include "i18n-message.selectorLabels" . | nindent 8 }}
+    {{- include "i18n-messages.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -69,20 +69,27 @@ spec:
             - containerPort: 8081
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: /health/liveness
               port: 8081
             initialDelaySeconds: {{ .Values.pod.probes.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.pod.probes.liveness.periodSeconds }}
 
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /health/readiness
               port: 8081
             initialDelaySeconds: {{ .Values.pod.probes.rediness.initialDelaySeconds }}
             periodSeconds: {{ .Values.pod.probes.rediness.periodSeconds }}
           resources:
           {{- toYaml .Values.resources | nindent 12 }}
           env:
+            - name: CONFIGURATION_FILE_NAME
+              value: application
+            - name: CONFIGURATION_FILE_TYPE
+              value: yml
+            - name: CONFIGURATION_PATH
+              value: /usr/local/onlyone-portal/config
+
             - name: AWS_ACCESS_KEY_ID
               value: {{ .Values.aws.accessKey }}
 

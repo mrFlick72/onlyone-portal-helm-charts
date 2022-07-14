@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "i18n-message.fullname" . }}
+  name: {{ include "i18n-messages.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "i18n-message.labels" . | nindent 4 }}
+    {{- include "i18n-messages.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: 8080
       name: http
   selector:
-    {{- include "i18n-message.selectorLabels" . | nindent 4 }}
+    {{- include "i18n-messages.selectorLabels" . | nindent 4 }}

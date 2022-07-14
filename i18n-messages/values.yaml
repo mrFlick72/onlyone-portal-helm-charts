@@ -79,4 +79,4 @@ application:
   sqsListenerPauseTimeout:
   messageBuketName:
 
-  update-signals: { }
+  updateSignalsMap: { }

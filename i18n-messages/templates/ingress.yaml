@@ -1,7 +1,9 @@
+{{- if eq .Values.ingress.enabled true }}
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "i18n-message.fullname" . }}
+  name: {{ include "i18n-messages.fullname" . }}
   namespace: {{ .Release.Namespace }}
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingress.className }}
@@ -18,7 +20,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "i18n-message.name" . }}
+                name: {{ include "i18n-messages.name" . }}
                 port:
                   number: 8080
       host: {{  .Values.ingress.host }}
@@ -26,3 +28,5 @@ spec:
   tls:
   {{- toYaml . | nindent 4}}
     {{- end }}
+
+{{end}}
