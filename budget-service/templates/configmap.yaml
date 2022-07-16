@@ -56,7 +56,7 @@ data:
         lazy-initialization: true
 
       datasource:
-        url: jdbc:postgresql://{{ .Values.application.database.host }}/budget_expense
+        url: jdbc:postgresql://{{ .Values.application.database.host }}/{{ .Values.application.database.schema }}
         username: {{ .Values.application.database.username }}
         password: {{ .Values.application.database.password }}
         driver-class-name: org.postgresql.Driver
