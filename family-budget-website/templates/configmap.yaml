@@ -53,7 +53,7 @@ data:
     auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
     logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
 
-    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/family-budget/site/index.html
+    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/family-budget/index
 
     spring:
       main:
