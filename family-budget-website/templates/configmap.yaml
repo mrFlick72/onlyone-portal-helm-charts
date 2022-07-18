@@ -46,14 +46,14 @@ metadata:
 data:
   application.yml: |
     granted-role:
-      account-service: {{ .Values.application.allowedRole }}
+      family-budget-website: {{ .Values.application.allowedRole }}
 
     endSessionWithoutDiscovery: true
     oidcEndSessionUrl: {{ .Values.vauthenticator.baseUrl }}/oidc/logout
     auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
     logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
 
-    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/account/site/index.html
+    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/family-budget/site/index.html
 
     spring:
       main:
