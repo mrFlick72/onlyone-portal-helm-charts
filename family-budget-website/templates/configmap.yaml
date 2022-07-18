@@ -127,6 +127,8 @@ data:
         health:
           show-details: ALWAYS
 
+    budgetServiceUri: {{ .Values.application.budgetServiceUri }}
+
     vauthenticator:
       session-management:
         enabled: true
