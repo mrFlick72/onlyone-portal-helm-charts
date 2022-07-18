@@ -81,7 +81,7 @@ application:
     pollingRate: 5s
   baseUrl: http://example.com
 
-  budgetServiceUri: http://example.com
+  budgetServiceUri: http://budget-service:8080
 
   redis:
     host: http://redis
