@@ -94,3 +94,7 @@ data:
 
     vauthenticator:
       host: {{ .Values.vauthenticator.baseUrl }}
+    budget-service:
+      dynamo-db:
+        search-tags:
+          table-name: {{ .Values.application.dynamoDb.searchTags.tableName }}

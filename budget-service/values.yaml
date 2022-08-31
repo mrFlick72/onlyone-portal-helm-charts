@@ -78,7 +78,9 @@ application:
     schema: your-schema
     username: root
     password: root
-
+  dynamoDb:
+    searchTags:
+      tableName: TableName
 
 vauthenticator:
   baseUrl: https://api.vauthenticator.com
