@@ -81,6 +81,8 @@ application:
   dynamoDb:
     searchTags:
       tableName: TableName
+    budgetExpense:
+      tableName: TableName
 
 vauthenticator:
   baseUrl: https://api.vauthenticator.com
