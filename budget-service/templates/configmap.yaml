@@ -100,3 +100,5 @@ data:
           table-name: {{ .Values.application.dynamoDb.searchTags.tableName }}
         budget-expense:
           table-name: {{ .Values.application.dynamoDb.budgetExpense.tableName }}
+        budget-revenue:
+          table-name: {{ .Values.application.dynamoDb.budgetRevenue.tableName }}
