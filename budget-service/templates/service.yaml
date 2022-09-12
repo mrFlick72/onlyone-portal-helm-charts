@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "budget-service.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.budgetService.service.type }}
   ports:
     - port: 8080
       name: http
