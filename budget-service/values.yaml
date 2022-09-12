@@ -73,11 +73,6 @@ logging:
     host: elasticSearch.host
 application:
   allowedRole: BUDGET
-  database:
-    host: your-host
-    schema: your-schema
-    username: root
-    password: root
   dynamoDb:
     searchTags:
       tableName: TableName
