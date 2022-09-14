@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "budget-service.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Chart.Name .Values.budgetService.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -11,10 +11,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "budget-service.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.budgetService.fullnameOverride }}
+{{- .Values.budgetService.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- $name := default .Chart.Name .Values.budgetService.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -55,7 +55,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Expand the name of the chart.
 */}}
 {{- define "family-budget-website.name" -}}
-{{- default "family-budget-website" .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default "family-budget-website" .Values.familyBudgetWebsite.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -64,10 +64,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "family-budget-website.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.familyBudgetWebsite.fullnameOverride }}
+{{- .Values.familyBudgetWebsite.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default "family-budget-website" .Values.nameOverride }}
+{{- $name := default "family-budget-website" .Values.familyBudgetWebsite.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
