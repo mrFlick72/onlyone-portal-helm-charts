@@ -19,7 +19,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "budget-service.name" . }}
+                name: {{ include "budget-service.fullname" . }}
                 port:
                   number: 8080
       host: {{  .Values.budgetService.ingress.host }}
