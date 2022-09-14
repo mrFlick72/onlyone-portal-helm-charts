@@ -36,7 +36,7 @@ spec:
 
         - name: application-config
           configMap:
-            name: application-config
+            name: budget-service-config
 
       containers:
         {{- if eq .Values.logging.enabled true }}
