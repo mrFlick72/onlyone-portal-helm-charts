@@ -4,7 +4,7 @@ metadata:
   name: {{ include "family-budget-website.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.familyBudgetWebsite.replicaCount }}
   selector:
     matchLabels:
   {{- include "family-budget-website.selectorLabels" . | nindent 6 }}
@@ -15,7 +15,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-      {{- with .Values.familyBudgetWebsite.podAnnotations }}
+      {{- with .Values.familyBudgetWebsite.lables }}
       {{- toYaml .Values.familyBudgetWebsite.lables | nindent 8 }}
       {{ end }}
     {{- include "family-budget-website.selectorLabels" . | nindent 8 }}
@@ -62,8 +62,8 @@ spec:
               subPath: application.yml
               mountPath: /usr/local/onlyone-portal/config/application.yml
 
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.familyBudgetWebsite.image.repository }}:{{ .Values.familyBudgetWebsite.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.familyBudgetWebsite.image.pullPolicy }}
           ports:
             - containerPort: 8080
             - containerPort: 8081
@@ -71,15 +71,15 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8081
-            initialDelaySeconds: {{ .Values.pod.probes.liveness.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pod.probes.liveness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.familyBudgetWebsite.pod.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.familyBudgetWebsite.pod.probes.liveness.periodSeconds }}
 
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8081
-            initialDelaySeconds: {{ .Values.pod.probes.rediness.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pod.probes.rediness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.familyBudgetWebsite.pod.probes.rediness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.familyBudgetWebsite.pod.probes.rediness.periodSeconds }}
           resources:
           {{- toYaml .Values.familyBudgetWebsite.resources | nindent 12 }}
           env:

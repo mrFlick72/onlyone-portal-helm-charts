@@ -15,7 +15,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-      {{- with .Values.budgetService.podAnnotations }}
+      {{- with .Values.budgetService.lables }}
       {{- toYaml .Values.budgetService.lables | nindent 8 }}
       {{ end }}
     {{- include "budget-service.selectorLabels" . | nindent 8 }}
