@@ -44,7 +44,7 @@ metadata:
   name: budget-service-config
   namespace: {{ .Release.Namespace }}
 data:
-  budgetService.yml: |
+  application.yml: |
     granted-role:
       budget-service: {{ .Values.budgetService.allowedRole }}
 
@@ -87,7 +87,8 @@ data:
           show-details: ALWAYS
 
     vauthenticator:
-      host: {{ .Values.vauthenticator.baseUrl }}
+      host: {{ .Values.vauthenticator.backChannelBaseUrl }}
+
     budget-service:
       dynamo-db:
         search-tags:
