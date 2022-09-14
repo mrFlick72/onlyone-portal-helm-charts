@@ -4,8 +4,8 @@ metadata:
   name: {{ include "family-budget-website.fullname" . }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    kubernetes.io/ingress.class: {{ .Values.ingress.className }}
-    {{- with .Values.ingress.annotations }}
+    kubernetes.io/ingress.class: {{ .Values.familyBudgetWebsite.ingress.className }}
+    {{- with .Values.familyBudgetWebsite.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 
@@ -21,8 +21,8 @@ spec:
                 name: {{ include "family-budget-website.name" . }}
                 port:
                   number: 8080
-      host: {{  .Values.ingress.host }}
-    {{- with .Values.ingress.tls }}
+      host: {{  .Values.familyBudgetWebsite.ingress.host }}
+    {{- with .Values.familyBudgetWebsite.ingress.tls }}
   tls:
   {{- toYaml . | nindent 4}}
     {{- end }}

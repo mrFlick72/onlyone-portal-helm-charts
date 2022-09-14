@@ -1,65 +1,6 @@
 # Default values for budget-service.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-replicaCount: 1
-
-image:
-  repository: mrflick72/budget-service-k8s
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-podAnnotations: {}
-
-lables: { }
-
-pod:
-  probes:
-    liveness:
-      initialDelaySeconds: 10
-      periodSeconds: 10
-    rediness:
-      initialDelaySeconds: 10
-      periodSeconds: 10
-
-service:
-  type: ClusterIP
-
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-  # kubernetes.io/tls-acme: "true"
-  host: chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-#   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
 aws:
   region: xxxx
   accessKey: xxxx
@@ -71,13 +12,62 @@ logging:
     host: kibana.host
   elasticSearch:
     host: elasticSearch.host
-application:
+
+budgetService:
+  replicaCount: 1
+
+  image:
+    repository: mrflick72/budget-service-k8s
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+  imagePullSecrets: [ ]
+  nameOverride: ""
+  fullnameOverride: ""
+
+  podAnnotations: { }
+
+  lables: { }
+
+  pod:
+    probes:
+      liveness:
+        initialDelaySeconds: 10
+        periodSeconds: 10
+      rediness:
+        initialDelaySeconds: 10
+        periodSeconds: 10
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: { }
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    host: chart-example.local
+    tls: [ ]
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  resources: { }
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+
   allowedRole: BUDGET
-  database:
-    host: your-host
-    schema: your-schema
-    username: root
-    password: root
   dynamoDb:
     searchTags:
       tableName: TableName
@@ -86,6 +76,90 @@ application:
     budgetRevenue:
       tableName: TableName
 
+familyBudgetWebsite:
+  replicaCount: 1
+
+  image:
+    repository: mrflick72/budget-service-k8s
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+  imagePullSecrets: [ ]
+  nameOverride: ""
+  fullnameOverride: ""
+
+  podAnnotations: { }
+
+  lables: { }
+
+  pod:
+    probes:
+      liveness:
+        initialDelaySeconds: 10
+        periodSeconds: 10
+      rediness:
+        initialDelaySeconds: 10
+        periodSeconds: 10
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: { }
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    host: chart-example.local
+    tls: [ ]
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  resources: { }
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+
+  allowedRole: BUDGET
+  sessionManagement:
+    pollingRate: 5s
+  baseUrl: http://example.com
+
+  budgetServiceUri: http://budget-service:8080
+
+  redis:
+    host: http://redis
+
+  sso:
+    clientApp:
+      clientId: xxxxxx
+      clientSecret: xxxxxx
+  i18n:
+    listener:
+      sleeping: 30s
+      queueUrl: https://sqs.region-code.amazonaws.com/00000000000/queue-name
+      maxNumberOfMessages: 5
+      visibilityTimeout: 10
+      waitTimeSeconds: 10
+    ttl: 30m
+    baseUrl:
+
 vauthenticator:
   baseUrl: https://api.vauthenticator.com
   backChannelBaseUrl: https://api.vauthenticator.com
+
+redis:
+  auth:
+    enabled: false
+  replica:
+    replicaCount: 1

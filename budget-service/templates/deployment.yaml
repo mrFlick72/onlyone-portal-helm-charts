@@ -4,23 +4,23 @@ metadata:
   name: {{ include "budget-service.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.budgetService.replicaCount }}
   selector:
     matchLabels:
   {{- include "budget-service.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.budgetService.podAnnotations }}
       annotations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-      {{- with .Values.podAnnotations }}
-      {{- toYaml .Values.lables | nindent 8 }}
+      {{- with .Values.budgetService.lables }}
+      {{- toYaml .Values.budgetService.lables | nindent 8 }}
       {{ end }}
     {{- include "budget-service.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.budgetService.imagePullSecrets }}
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -36,7 +36,7 @@ spec:
 
         - name: application-config
           configMap:
-            name: application-config
+            name: budget-service-config
 
       containers:
         {{- if eq .Values.logging.enabled true }}
@@ -62,8 +62,8 @@ spec:
               subPath: application.yml
               mountPath: /usr/local/onlyone-portal/config/application.yml
 
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.budgetService.image.repository }}:{{ .Values.budgetService.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.budgetService.image.pullPolicy }}
           ports:
             - containerPort: 8080
             - containerPort: 8081
@@ -71,17 +71,17 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8081
-            initialDelaySeconds: {{ .Values.pod.probes.liveness.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pod.probes.liveness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.budgetService.pod.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.budgetService.pod.probes.liveness.periodSeconds }}
 
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8081
-            initialDelaySeconds: {{ .Values.pod.probes.rediness.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pod.probes.rediness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.budgetService.pod.probes.rediness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.budgetService.pod.probes.rediness.periodSeconds }}
           resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+          {{- toYaml .Values.budgetService.resources | nindent 12 }}
           env:
             - name: AWS_ACCESS_KEY_ID
               value: {{ .Values.aws.accessKey }}

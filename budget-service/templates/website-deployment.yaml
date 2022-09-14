@@ -4,23 +4,23 @@ metadata:
   name: {{ include "family-budget-website.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.familyBudgetWebsite.replicaCount }}
   selector:
     matchLabels:
   {{- include "family-budget-website.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.familyBudgetWebsite.podAnnotations }}
       annotations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-      {{- with .Values.podAnnotations }}
-      {{- toYaml .Values.lables | nindent 8 }}
+      {{- with .Values.familyBudgetWebsite.lables }}
+      {{- toYaml .Values.familyBudgetWebsite.lables | nindent 8 }}
       {{ end }}
     {{- include "family-budget-website.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.familyBudgetWebsite.imagePullSecrets }}
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -36,7 +36,7 @@ spec:
 
         - name: application-config
           configMap:
-            name: application-config
+            name: family-budget-website-config
 
       containers:
         {{- if eq .Values.logging.enabled true }}
@@ -53,7 +53,7 @@ spec:
 
         {{ end }}
 
-        - name: {{ .Chart.Name }}
+        - name: family-budget-website
           volumeMounts:
             - name: application-logs
               mountPath: /var/log/onlyone-portal/logs/
@@ -62,8 +62,8 @@ spec:
               subPath: application.yml
               mountPath: /usr/local/onlyone-portal/config/application.yml
 
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.familyBudgetWebsite.image.repository }}:{{ .Values.familyBudgetWebsite.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.familyBudgetWebsite.image.pullPolicy }}
           ports:
             - containerPort: 8080
             - containerPort: 8081
@@ -71,17 +71,17 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8081
-            initialDelaySeconds: {{ .Values.pod.probes.liveness.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pod.probes.liveness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.familyBudgetWebsite.pod.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.familyBudgetWebsite.pod.probes.liveness.periodSeconds }}
 
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8081
-            initialDelaySeconds: {{ .Values.pod.probes.rediness.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pod.probes.rediness.periodSeconds }}
+            initialDelaySeconds: {{ .Values.familyBudgetWebsite.pod.probes.rediness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.familyBudgetWebsite.pod.probes.rediness.periodSeconds }}
           resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+          {{- toYaml .Values.familyBudgetWebsite.resources | nindent 12 }}
           env:
             - name: AWS_ACCESS_KEY_ID
               value: {{ .Values.aws.accessKey }}

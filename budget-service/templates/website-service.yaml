@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "family-budget-website.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.familyBudgetWebsite.service.type }}
   ports:
     - port: 8080
       name: http

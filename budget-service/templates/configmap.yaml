@@ -41,12 +41,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: application-config
+  name: budget-service-config
   namespace: {{ .Release.Namespace }}
 data:
   application.yml: |
     granted-role:
-      budget-service: {{ .Values.application.allowedRole }}
+      budget-service: {{ .Values.budgetService.allowedRole }}
 
     logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
 
@@ -54,12 +54,6 @@ data:
     spring:
       main:
         lazy-initialization: true
-
-      datasource:
-        url: jdbc:postgresql://{{ .Values.application.database.host }}/{{ .Values.application.database.schema }}
-        username: {{ .Values.application.database.username }}
-        password: {{ .Values.application.database.password }}
-        driver-class-name: org.postgresql.Driver
 
       security:
         oauth2:
@@ -93,12 +87,132 @@ data:
           show-details: ALWAYS
 
     vauthenticator:
-      host: {{ .Values.vauthenticator.baseUrl }}
+      host: {{ .Values.vauthenticator.backChannelBaseUrl }}
+
     budget-service:
       dynamo-db:
         search-tags:
-          table-name: {{ .Values.application.dynamoDb.searchTags.tableName }}
+          table-name: {{ .Values.budgetService.dynamoDb.searchTags.tableName }}
         budget-expense:
-          table-name: {{ .Values.application.dynamoDb.budgetExpense.tableName }}
+          table-name: {{ .Values.budgetService.dynamoDb.budgetExpense.tableName }}
         budget-revenue:
-          table-name: {{ .Values.application.dynamoDb.budgetRevenue.tableName }}
+          table-name: {{ .Values.budgetService.dynamoDb.budgetRevenue.tableName }}
+    
+    
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: family-budget-website-config
+  namespace: {{ .Release.Namespace }}
+data:
+  application.yml: |
+    granted-role:
+      family-budget-website: {{ .Values.familyBudgetWebsite.allowedRole }}
+
+    endSessionWithoutDiscovery: true
+    oidcEndSessionUrl: {{ .Values.vauthenticator.baseUrl }}/oidc/logout
+    auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
+    logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
+
+    postLogoutRedirectUri: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget/index
+
+    spring:
+      main:
+        lazy-initialization: true
+
+      cache:
+        cache-names:
+          - family-budget-website.i18n.messages
+
+      session:
+        timeout: 30m
+        store-type: redis
+        redis:
+          namespace: family-budget-website:session
+
+      security:
+        oauth2:
+          client:
+            registration:
+              client:
+                client-id: {{ .Values.familyBudgetWebsite.sso.clientApp.clientId }}
+                client-secret: {{ .Values.familyBudgetWebsite.sso.clientApp.clientSecret }}
+                client-name: VAuthenticator
+                provider: vauthenticator
+                scope:
+                  - openid
+                  - profile
+                  - email
+                redirect-uri: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget/login/oauth2/code/client
+                client-authentication-method: basic
+                authorization-grant-type: authorization_code
+            provider:
+              vauthenticator:
+                authorization-uri: {{ .Values.vauthenticator.baseUrl }}/oauth2/authorize
+                token-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/oauth2/token
+                user-info-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/userinfo
+                user-info-authentication-method: header
+                jwk-set-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/oauth2/jwks
+                user-name-attribute: email
+
+      redis:
+        host: {{ .Values.familyBudgetWebsite.redis.host }}
+
+      sleuth:
+        redis:
+          enabled: false
+
+    server:
+      port: 8080
+      forward-headers-strategy: framework
+      servlet:
+        context-path: /family-budget
+      http2:
+        enabled: true
+      compression:
+        enabled: true
+        min-response-size: 1KB
+
+    management:
+      server:
+        port: 8081
+        servlet:
+          context-path: /
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        shutdown:
+          enabled: true
+        health:
+          show-details: ALWAYS
+
+    budgetServiceUri: {{ .Values.familyBudgetWebsite.budgetServiceUri }}
+
+    vauthenticator:
+      session-management:
+        enabled: true
+        rp-iframe:
+          host: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget
+          polling-rate: {{ .Values.familyBudgetWebsite.sessionManagement.pollingRate }}
+          origin: {{ .Values.vauthenticator.baseUrl }}
+          logout-uri: /family-budget/logout
+      client:
+        registrationId: client
+      host: {{ .Values.vauthenticator.baseUrl }}
+      backChannelHost: {{ .Values.vauthenticator.backChannelBaseUrl }}
+
+    i18n-messages:
+      cache:
+        updater:
+          listener:
+            sleeping: {{ .Values.familyBudgetWebsite.i18n.listener.sleeping }}
+            queueUrl: {{ .Values.familyBudgetWebsite.i18n.listener.queueUrl }}
+            maxNumberOfMessages: {{ .Values.familyBudgetWebsite.i18n.listener.maxNumberOfMessages }}
+            visibilityTimeout: {{ .Values.familyBudgetWebsite.i18n.listener.visibilityTimeout }}
+            waitTimeSeconds: {{ .Values.familyBudgetWebsite.i18n.listener.waitTimeSeconds }}
+      ttl: {{ .Values.familyBudgetWebsite.i18n.ttl }}
+      base-url: {{ .Values.familyBudgetWebsite.i18n.baseUrl }}

@@ -1,12 +1,12 @@
-{{if .Values.ingress.enabled }}
+{{if .Values.budgetService.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "budget-service.fullname" . }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    kubernetes.io/ingress.class: {{ .Values.ingress.className }}
-    {{- with .Values.ingress.annotations }}
+    kubernetes.io/ingress.class: {{ .Values.budgetService.ingress.className }}
+    {{- with .Values.budgetService.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 
@@ -22,8 +22,8 @@ spec:
                 name: {{ include "budget-service.name" . }}
                 port:
                   number: 8080
-      host: {{  .Values.ingress.host }}
-    {{- with .Values.ingress.tls }}
+      host: {{  .Values.budgetService.ingress.host }}
+    {{- with .Values.budgetService.ingress.tls }}
   tls:
   {{- toYaml . | nindent 4}}
     {{- end }}
