@@ -84,12 +84,12 @@ spec:
           {{- toYaml .Values.familyBudgetWebsite.resources | nindent 12 }}
           env:
             - name: AWS_ACCESS_KEY_ID
-              value: {{ .Values.aws.accessKey }}
+              value: {{ .Values.familyBudgetWebsite.aws.accessKey }}
 
             - name: AWS_SECRET_ACCESS_KEY
-              value: {{ .Values.aws.secretKey }}
+              value: {{ .Values.familyBudgetWebsite.aws.secretKey }}
             - name: AWS_REGION
-              value: {{ .Values.aws.region }}
+              value: {{ .Values.familyBudgetWebsite.aws.region }}
 
             - name: spring.config.additional-location
               value: /usr/local/onlyone-portal/config/
