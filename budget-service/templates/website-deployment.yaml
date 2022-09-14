@@ -58,7 +58,7 @@ spec:
             - name: application-logs
               mountPath: /var/log/onlyone-portal/logs/
 
-            - name: family-budget-website-config
+            - name: application-config
               subPath: application.yml
               mountPath: /usr/local/onlyone-portal/config/application.yml
 
