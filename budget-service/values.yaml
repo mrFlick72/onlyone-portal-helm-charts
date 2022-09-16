@@ -77,6 +77,9 @@ budgetService:
     budgetRevenue:
       tableName: TableName
 
+  redis:
+    host: http://redis
+
 familyBudgetWebsite:
   replicaCount: 1
 
