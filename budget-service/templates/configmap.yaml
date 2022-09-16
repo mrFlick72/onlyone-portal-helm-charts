@@ -93,6 +93,8 @@ data:
       dynamo-db:
         search-tags:
           table-name: {{ .Values.budgetService.dynamoDb.searchTags.tableName }}
+          cache-name: {{ .Values.budgetService.dynamoDb.searchTags.cacheName }}
+          cache-ttl: {{ .Values.budgetService.dynamoDb.searchTags.cacheTtl }}
         budget-expense:
           table-name: {{ .Values.budgetService.dynamoDb.budgetExpense.tableName }}
         budget-revenue:

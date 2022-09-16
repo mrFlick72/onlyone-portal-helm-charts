@@ -70,6 +70,8 @@ budgetService:
   dynamoDb:
     searchTags:
       tableName: TableName
+      cacheName: CacheName
+      cacheTtl: 1000
     budgetExpense:
       tableName: TableName
     budgetRevenue:
