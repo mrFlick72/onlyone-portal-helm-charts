@@ -89,10 +89,12 @@ data:
           enabled: true
         health:
           show-details: ALWAYS
-          livenessState:
-            enabled: true
-          readinessState:
-            enabled: true
+      health:
+        show-details: ALWAYS
+        livenessState:
+          enabled: true
+        readinessState:
+          enabled: true
 
     vauthenticator:
       host: {{ .Values.vauthenticator.backChannelBaseUrl }}
@@ -195,10 +197,18 @@ data:
           exposure:
             include: "*"
       endpoint:
+        probes:
+          enabled: true
         shutdown:
           enabled: true
         health:
           show-details: ALWAYS
+      health:
+        show-details: ALWAYS
+        livenessState:
+          enabled: true
+        readinessState:
+          enabled: true
 
     budgetServiceUri: {{ .Values.familyBudgetWebsite.budgetServiceUri }}
 
