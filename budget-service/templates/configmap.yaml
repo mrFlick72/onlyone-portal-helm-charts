@@ -52,6 +52,8 @@ data:
 
 
     spring:
+      profiles:
+        active: kubernetes
       redis:
         host: {{ .Values.budgetService.redis.host }}
       main:
@@ -131,6 +133,9 @@ data:
     postLogoutRedirectUri: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget/index
 
     spring:
+      profiles:
+        active: kubernetes
+
       main:
         lazy-initialization: true
 
