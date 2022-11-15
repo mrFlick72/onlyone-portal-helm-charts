@@ -65,6 +65,8 @@ aws:
   accessKey: xxxx
   secretKey: xxxx
 
+vauthenticator:
+  host: https://api.vauthenticator.com
 logging:
   enabled: false
   kibana:
@@ -72,6 +74,7 @@ logging:
   elasticSearch:
     host: elasticSearch.host
 application:
+  allowedAuthorities: i18n-message:reader,i18n-message:writer
   sqsQueueUrl:
   sqsTimeout:
   sqsMaxNumberOfMessages:

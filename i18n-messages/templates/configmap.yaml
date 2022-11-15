@@ -55,5 +55,9 @@ data:
     SQS_LISTENER_PAUSE_TIMEOUT: {{ .Values.application.sqsListenerPauseTimeout}}
     MESSAGES_BUKET: {{ .Values.application.messageBuketName }}
 
+    security:
+      jwk-uri: {{ .Values.vauthenticator.host }}
+      #  allowed-authority: I18N_APPLICATION
+      allowed-authority: {{ .Values.application.allowedAuthorities }}
     update-signals:
        {{ .Values.application.updateSignalsMap }}
