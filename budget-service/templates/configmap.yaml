@@ -156,6 +156,7 @@ data:
                   - openid
                   - profile
                   - email
+                  - i18n-message:reader
                 redirect-uri: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget/login/oauth2/code/client
                 client-authentication-method: basic
                 authorization-grant-type: authorization_code
