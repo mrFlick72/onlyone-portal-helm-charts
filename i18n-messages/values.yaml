@@ -66,7 +66,7 @@ aws:
   secretKey: xxxx
 
 vauthenticator:
-  host: https://api.vauthenticator.com
+  jwks: https://api.vauthenticator.com/oauth2/jwks
 logging:
   enabled: false
   kibana:

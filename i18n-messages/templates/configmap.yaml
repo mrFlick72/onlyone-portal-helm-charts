@@ -56,7 +56,7 @@ data:
     MESSAGES_BUKET: {{ .Values.application.messageBuketName }}
 
     security:
-      jwk-uri: {{ .Values.vauthenticator.host }}
+      jwk-uri: {{ .Values.vauthenticator.jwks }}
       #  allowed-authority: I18N_APPLICATION
       allowed-authority: {{ .Values.application.allowedAuthorities }}
     update-signals:
