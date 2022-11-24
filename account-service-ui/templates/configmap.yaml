@@ -83,6 +83,7 @@ data:
                   - profile
                   - email
                   - i18n-message:reader
+                  - admin:reset-password
                 redirect-uri: {{ .Values.application.baseUrl }}/account/login/oauth2/code/client
                 client-authentication-method: basic
                 authorization-grant-type: authorization_code
