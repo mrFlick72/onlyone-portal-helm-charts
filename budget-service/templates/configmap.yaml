@@ -159,23 +159,18 @@ data:
                   - i18n-message:reader
                   - admin:reset-password
                 redirect-uri: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget/login/oauth2/code/client
-                client-authentication-method: basic
                 authorization-grant-type: authorization_code
             provider:
               vauthenticator:
                 authorization-uri: {{ .Values.vauthenticator.baseUrl }}/oauth2/authorize
                 token-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/oauth2/token
                 user-info-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/userinfo
-                user-info-authentication-method: header
                 jwk-set-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/oauth2/jwks
                 user-name-attribute: email
 
-      redis:
-        host: {{ .Values.familyBudgetWebsite.redis.host }}
-
-      sleuth:
+      data:
         redis:
-          enabled: false
+          host: {{ .Values.familyBudgetWebsite.redis.host }}
 
     server:
       port: 8080
