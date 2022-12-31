@@ -54,6 +54,9 @@ data:
     spring:
       profiles:
         active: kubernetes
+      data:
+        redis:
+          host: {{ .Values.budgetService.redis.host }}
       redis:
         host: {{ .Values.budgetService.redis.host }}
       main:
