@@ -24,6 +24,6 @@ version: 0.1.0
 appVersion: "1.16.0"
 dependencies:
   - name: redis
-    version: "15.7.2"
+    version: "17.7.4"
     repository: "https://charts.bitnami.com/bitnami"
     condition: in-namespace.redis.enabled
