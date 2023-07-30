@@ -32,9 +32,6 @@ spec:
       containers:
         - name: family-budget-website
           volumeMounts:
-            - name: application-logs
-              mountPath: /var/log/onlyone-portal/logs/
-
             - name: application-config
               subPath: application.yml
               mountPath: /usr/local/onlyone-portal/config/application.yml
