@@ -25,34 +25,11 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        {{- if eq .Values.logging.enabled true }}
-
-        - name: filebeat
-          configMap:
-            name: filebeat-config
-        {{ end }}
-        - name: application-logs
-          emptyDir: { }
-
         - name: application-config
           configMap:
             name: family-budget-website-config
 
       containers:
-        {{- if eq .Values.logging.enabled true }}
-
-        - name: filebeats
-          image: docker.elastic.co/beats/filebeat:7.6.1
-          volumeMounts:
-            - name: application-logs
-              mountPath: /var/log/onlyone-portal/logs/
-
-            - name: filebeat
-              subPath: filebeat.yml
-              mountPath: /usr/share/filebeat/filebeat.yml
-
-        {{ end }}
-
         - name: family-budget-website
           volumeMounts:
             - name: application-logs

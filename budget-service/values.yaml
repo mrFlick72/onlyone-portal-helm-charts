@@ -1,13 +1,3 @@
-# Default values for budget-service.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-logging:
-  enabled: false
-  kibana:
-    host: kibana.host
-  elasticSearch:
-    host: elasticSearch.host
-
 budgetService:
   replicaCount: 1
 
@@ -152,15 +142,6 @@ familyBudgetWebsite:
     clientApp:
       clientId: xxxxxx
       clientSecret: xxxxxx
-  i18n:
-    listener:
-      sleeping: 30s
-      queueUrl: https://sqs.region-code.amazonaws.com/00000000000/queue-name
-      maxNumberOfMessages: 5
-      visibilityTimeout: 10
-      waitTimeSeconds: 10
-    ttl: 30m
-    baseUrl:
 
 vauthenticator:
   baseUrl: https://api.vauthenticator.com
