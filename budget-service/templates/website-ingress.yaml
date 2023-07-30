@@ -14,7 +14,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /family-budget
+          - path: /family-budget-service
             pathType: Prefix
             backend:
               service:

@@ -55,7 +55,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Expand the name of the chart.
 */}}
 {{- define "family-budget-website.name" -}}
-{{- default "family-budget-website" .Values.familyBudgetWebsite.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default "family-budget-service-website" .Values.familyBudgetWebsite.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -67,7 +67,7 @@ If release name contains chart name it will be used as a full name.
 {{- if .Values.familyBudgetWebsite.fullnameOverride }}
 {{- .Values.familyBudgetWebsite.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default "family-budget-website" .Values.familyBudgetWebsite.nameOverride }}
+{{- $name := default "family-budget-service-website" .Values.familyBudgetWebsite.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -80,7 +80,7 @@ If release name contains chart name it will be used as a full name.
 Create chart name and version as used by the chart label.
 */}}
 {{- define "family-budget-website.chart" -}}
-{{- printf "%s-%s" "family-budget-website" .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" "family-budget-service-website" .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

@@ -53,7 +53,7 @@ spec:
 
         {{ end }}
 
-        - name: family-budget-website
+        - name: family-budget-service-website
           volumeMounts:
             - name: application-logs
               mountPath: /var/log/onlyone-portal/logs/

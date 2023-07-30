@@ -1,4 +1,4 @@
-# Default values for budget.
+# Default values for budget-service.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 logging:
@@ -12,7 +12,7 @@ budgetService:
   replicaCount: 1
 
   image:
-    repository: mrflick72/budget-k8s
+    repository: mrflick72/budget-service-k8s
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
@@ -84,7 +84,7 @@ familyBudgetWebsite:
   replicaCount: 1
 
   image:
-    repository: mrflick72/budget-k8s
+    repository: mrflick72/budget-service-k8s
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
