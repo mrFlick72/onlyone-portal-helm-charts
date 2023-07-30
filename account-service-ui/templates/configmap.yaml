@@ -11,7 +11,7 @@ data:
     oidcEndSessionUrl: {{ .Values.vauthenticator.baseUrl }}/oidc/logout
     auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
 
-    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/account/site/index
+    postLogoutRedirectUri: {{ .Values.application.baseUrl }}/account/index
 
     spring:
       main:
