@@ -1,43 +1,3 @@
-{{- if eq .Values.logging.enabled true }}
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: filebeat-config
-  namespace: {{ .Release.Namespace }}
-data:
-  filebeat.yml: |-
-    filebeat.config:
-      modules:
-        path: ${path.config}/modules.d/*.yml
-        reload.enabled: true
-
-    filebeat.inputs:
-      - type: log
-        multiline.pattern: '^java.|^[[:space:]]+(at|\.{3})\b|^Caused by:|^END:'
-        multiline.negate: false
-        multiline.match: after
-
-        enabled: true
-        paths:
-          - /var/log/onlyone-portal/logs/*.log
-
-    processors:
-      - add_cloud_metadata: ~
-      - add_docker_metadata: ~
-
-    setup.kibana:
-      host: "{{ .Values.logging.kibana.host }}"
-
-    output.elasticsearch:
-      hosts: ['{{ .Values.logging.elasticSearch.host }}']
-
-{{ end }}
-
-
----
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -47,9 +7,6 @@ data:
   application.yml: |
     granted-role:
       budget-service: {{ .Values.budgetService.allowedRole }}
-
-    logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
-
 
     spring:
       profiles:
@@ -122,10 +79,8 @@ data:
     granted-role:
       family-budget-website: {{ .Values.familyBudgetWebsite.allowedRole }}
 
-    endSessionWithoutDiscovery: true
     oidcEndSessionUrl: {{ .Values.vauthenticator.baseUrl }}/oidc/logout
     auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
-    logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
 
     postLogoutRedirectUri: {{ .Values.familyBudgetWebsite.baseUrl }}/family-budget/index
 
@@ -218,15 +173,3 @@ data:
         registrationId: client
       host: {{ .Values.vauthenticator.baseUrl }}
       backChannelHost: {{ .Values.vauthenticator.backChannelBaseUrl }}
-
-    i18n-messages:
-      cache:
-        updater:
-          listener:
-            sleeping: {{ .Values.familyBudgetWebsite.i18n.listener.sleeping }}
-            queueUrl: {{ .Values.familyBudgetWebsite.i18n.listener.queueUrl }}
-            maxNumberOfMessages: {{ .Values.familyBudgetWebsite.i18n.listener.maxNumberOfMessages }}
-            visibilityTimeout: {{ .Values.familyBudgetWebsite.i18n.listener.visibilityTimeout }}
-            waitTimeSeconds: {{ .Values.familyBudgetWebsite.i18n.listener.waitTimeSeconds }}
-      ttl: {{ .Values.familyBudgetWebsite.i18n.ttl }}
-      base-url: {{ .Values.familyBudgetWebsite.i18n.baseUrl }}
