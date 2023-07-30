@@ -141,15 +141,3 @@ data:
         registrationId: client
       host: {{ .Values.vauthenticator.baseUrl }}
       backChannelHost: {{ .Values.vauthenticator.backChannelBaseUrl }}
-
-    i18n-messages:
-      cache:
-        updater:
-          listener:
-            sleeping: {{ .Values.application.i18n.listener.sleeping }}
-            queueUrl: {{ .Values.application.i18n.listener.queueUrl }}
-            maxNumberOfMessages: {{ .Values.application.i18n.listener.maxNumberOfMessages }}
-            visibilityTimeout: {{ .Values.application.i18n.listener.visibilityTimeout }}
-            waitTimeSeconds: {{ .Values.application.i18n.listener.waitTimeSeconds }}
-      ttl: {{ .Values.application.i18n.ttl }}
-      base-url: {{ .Values.application.i18n.baseUrl }}
