@@ -48,10 +48,8 @@ data:
     granted-role:
       account-service: {{ .Values.application.allowedRole }}
 
-    endSessionWithoutDiscovery: true
     oidcEndSessionUrl: {{ .Values.vauthenticator.baseUrl }}/oidc/logout
     auth.oidcIss: {{ .Values.vauthenticator.baseUrl }}
-    logging.file.name: /var/log/onlyone-portal/logs/${spring.application.name}.log
 
     postLogoutRedirectUri: {{ .Values.application.baseUrl }}/account/site/index.html
 
@@ -95,13 +93,11 @@ data:
                 user-info-authentication-method: header
                 jwk-set-uri: {{ .Values.vauthenticator.backChannelBaseUrl }}/oauth2/jwks
                 user-name-attribute: email
-
-      redis:
-        host: {{ .Values.application.redis.host }}
-
-      sleuth:
+      data:
         redis:
-          enabled: false
+          host: {{ .Values.application.redis.host }}
+
+
 
     server:
       port: 8080

@@ -14,8 +14,6 @@ data:
       data:
         redis:
           host: {{ .Values.budgetService.redis.host }}
-      redis:
-        host: {{ .Values.budgetService.redis.host }}
       main:
         lazy-initialization: true
 
